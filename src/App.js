@@ -34,10 +34,28 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {(this.state.isImage) ? <input type="number" ref={cellValue => this.cellValue = cellValue} /> : null}
-        {(this.state.isImage) ? <button onClick={this.pixelizationHandler}>Пикселизировать</button> : null}
-        <input type="file" id="file" onChange={this.handleImageChange} />
-        <canvas className="canvasStyle" ref={canvas => this.canvas = canvas} />
+        <div style={{ width: '200px' }}>
+          {(this.state.isImage)
+            ?
+              <div>
+                <label style={{ marginBottom: '20px' }}>
+                  <span>Размер ячейки</span>
+                  <input style={{ width: '50px' }} type="number" ref={cellValue => this.cellValue = cellValue} />
+                </label>
+                <button onClick={this.pixelizationHandler}>Пикселизировать</button>
+              </div>
+            : null
+          }
+        </div>
+        <div className={`fileWrapper ${!this.state.isImage ? 'fileWrapperBg' : ''}`}>
+          <canvas className="canvasStyle" ref={canvas => this.canvas = canvas} />
+          <input
+            type="file"
+            id="file"
+            className="inputFile"
+            onChange={this.handleImageChange}
+          />
+        </div>
       </div>
     );
   }
