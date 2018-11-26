@@ -85,6 +85,7 @@ function drawNet(width, height, coef) {
 
   context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
+  setTimeout(() => {
   for (var top = 0; top < canvasWidth; top += cellWidth) {
     for (var left = 0; left < canvasHeight; left += cellHeight) {
       let cell = {
@@ -128,7 +129,6 @@ function drawNet(width, height, coef) {
   const pixelsData = context.getImageData(0, 0, canvas.width, canvas.height);
   console.log(pixelsData);
   console.log(cells);
-  const pixelsInCells = [];
   cells.forEach((cell, cellIndex) => {
     const oneCellPixels = [];
     const top = cell.getTop();
@@ -137,13 +137,13 @@ function drawNet(width, height, coef) {
     let i = 0;
     let j = 0;
     let k = 0;
-    let l = 0;
     let pIndex = ((top * canvasWidth) + left) * cellWidth * 4;
     while (i < pIndex * cellHeight) {
       // console.log(top + i);
       
       cell.pixelsColors[k] = [];
       while (j < cellWidth * 4) {
+        // cell.pixelsColors[k][l] = [];
         
         // let pIndex = 675826;
     //     // console.log(top, left, pIndex);
@@ -154,46 +154,51 @@ function drawNet(width, height, coef) {
           pixelsData.data[pIndex+i+j+3]
         ]);
         j = j + 4;
-        l++;
       }
       i += pIndex;
       j = 0;
       k++;
     }
     // pixelsInCells.push(oneCellPixels);
-  });
-  console.log(pixelsInCells);
   // context.clearRect(0, 0, canvas.width, canvas.height);
 
-  const finalValues = [];
-  cells.forEach((cell, index) => {
-    const r = [];
-    const g = [];
-    const b = [];
-    const a = [];
-    // let cell = pixelsInCells[index];
-    cell.pixelsColors.forEach(pixel => {
-      r.push(pixel[0][0]);
-      g.push(pixel[1][0]);
-      b.push(pixel[2][0]);
-      a.push(pixel[3][0]);
-    })
-    const cellColor = [
-      // r.reduce((a, b) => a + b, 0) / cellWidth,
-      // g.reduce((a, b) => a + b, 0) / cellWidth,
-      // b.reduce((a, b) => a + b, 0) / cellWidth,
-      // a.reduce((a, b) => a + b, 0) / cellWidth
-      r[0],
-      g[0],
-      b[0],
-      a[0]
-    ];
-    // item.fill(true, '#000')
-    // if (cellColor[0] && cellColor[1] && cellColor[2] && cellColor[3]) {
-      cell.fill(true, `rgba(${cellColor[0]}, ${cellColor[1]}, ${cellColor[2]}, ${cellColor[3]})`);
-    // }
+  const colors = {}
+  // let cell = pixelsInCells[index];
+  cell.pixelsColors.forEach(row => {
+    row.forEach(col => {
+      const color = col.join(',');
+      if (!colors[color]) {
+        colors[color] = 1;
+      } else {
+        colors[color]++;
+      }
+    });
   })
+  // console.log(colors);
+  const mostPopularColors = Object.keys(colors).sort((a, b) => {
+    return colors[b] - colors[a];
+  })
+
+  let mostPopular;
+  mostPopularColors.forEach((item, index) => {
+    if ((!mostPopular && item !== ',,,' && item !== '0,0,0,0') || !mostPopularColors[index+1]) {
+      mostPopular = item;
+      console.log(cell.top, cell.left, item);
+    }
+  });
+  // console.log(mostPopular);
+  // item.fill(true, '#000')
+  // if (cellColor[0] && cellColor[1] && cellColor[2] && cellColor[3]) {
+    cell.fill(true, `rgba(${mostPopular})`);
+    // cell.fill(true, `rgba(0, 0, 0, 0.5)`);
+  // }
+  cells.forEach((cell, index) => {
+    
+  })
+});
+
   console.log(cells);
+}, 1000)
   
 
   // function getCellByPosition(top, left) {
