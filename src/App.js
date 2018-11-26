@@ -138,11 +138,13 @@ function drawNet(width, height, coef) {
     let j = 0;
     let k = 0;
     let l = 0;
-    while (i < cellHeight * 4) {
+    let pIndex = ((top * canvasWidth) + left) * cellWidth * 4;
+    while (i < pIndex * cellHeight) {
       // console.log(top + i);
+      
       cell.pixelsColors[k] = [];
       while (j < cellWidth * 4) {
-        let pIndex = ((top * canvasWidth) + left) * cellWidth * 4;
+        
         // let pIndex = 675826;
     //     // console.log(top, left, pIndex);
         cell.pixelsColors[k].push([
@@ -154,13 +156,14 @@ function drawNet(width, height, coef) {
         j = j + 4;
         l++;
       }
-      i = i + 4;
+      i += pIndex;
       j = 0;
       k++;
     }
     // pixelsInCells.push(oneCellPixels);
   });
   console.log(pixelsInCells);
+  // context.clearRect(0, 0, canvas.width, canvas.height);
 
   const finalValues = [];
   cells.forEach((cell, index) => {
