@@ -129,6 +129,7 @@ function drawNet(width, height, coef) {
   const pixelsData = context.getImageData(0, 0, canvas.width, canvas.height);
   console.log(pixelsData);
   console.log(cells);
+  console.log(pixelsData.data.length, pixelsData.data.length/4);
   cells.forEach((cell, cellIndex) => {
     const oneCellPixels = [];
     const top = cell.getTop();
@@ -137,7 +138,8 @@ function drawNet(width, height, coef) {
     let i = 0;
     let j = 0;
     let k = 0;
-    let pIndex = ((top * canvasWidth) + left) * cellWidth * 4;
+    const pIndex = ((top * canvasHeight) + left) * 4;
+    console.log(pIndex)
     while (i < pIndex * cellHeight) {
       // console.log(top + i);
       
@@ -183,7 +185,7 @@ function drawNet(width, height, coef) {
   mostPopularColors.forEach((item, index) => {
     if ((!mostPopular && item !== ',,,' && item !== '0,0,0,0') || !mostPopularColors[index+1]) {
       mostPopular = item;
-      console.log(cell.top, cell.left, item);
+      // console.log(cell.top, cell.left, item);
     }
   });
   // console.log(mostPopular);
